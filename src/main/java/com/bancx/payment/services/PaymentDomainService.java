@@ -1,7 +1,6 @@
 package com.bancx.payment.services;
 
 import com.bancx.loan.entities.Loan;
-import com.bancx.loan.services.LoanDomainService;
 import com.bancx.payment.data.PaymentInDTO;
 import com.bancx.payment.data.PaymentOutDTO;
 import com.bancx.payment.entities.Payment;
@@ -19,9 +18,6 @@ public class PaymentDomainService {
 
     @Autowired
     private final PaymentRepository paymentRepository;
-
-//    @Autowired
-//    private final LoanDomainService loanDomainService;
 
     @Autowired
     private ModelMapper modelMapper;

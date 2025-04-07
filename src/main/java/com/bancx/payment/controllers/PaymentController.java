@@ -1,7 +1,6 @@
 package com.bancx.payment.controllers;
 
 import com.bancx.application.services.ProcessingService;
-import com.bancx.loan.data.LoanOutDTO;
 import com.bancx.payment.data.PaymentInDTO;
 import com.bancx.payment.data.PaymentOutDTO;
 import com.bancx.payment.services.PaymentDomainService;

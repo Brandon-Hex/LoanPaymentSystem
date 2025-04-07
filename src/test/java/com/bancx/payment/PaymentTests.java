@@ -1,8 +1,6 @@
 package com.bancx.payment;
 
 import com.bancx.loan.entities.Loan;
-import com.bancx.loan.repositories.LoanRepository;
-import com.bancx.loan.services.LoanDomainService;
 import com.bancx.payment.data.PaymentInDTO;
 import com.bancx.payment.data.PaymentOutDTO;
 import com.bancx.payment.entities.Payment;
@@ -25,11 +23,9 @@ public class PaymentTests {
     private PaymentRepository paymentRepository;
     private PaymentDomainService paymentService;
 
-    private ModelMapper modelMapper;
-
     @BeforeEach
     public void setup() {
-        modelMapper = new ModelMapper();
+        ModelMapper modelMapper = new ModelMapper();
         paymentRepository = mock(PaymentRepository.class);
 
         paymentService = new PaymentDomainService(paymentRepository, modelMapper);

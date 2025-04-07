@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
     @Query("SELECT p FROM Payment p WHERE p.loan.loanId = :loanId")
-    public List<Payment> findAllByLoanId(@Param("loanId") Long loanId);
+    List<Payment> findAllByLoanId(@Param("loanId") Long loanId);
 }

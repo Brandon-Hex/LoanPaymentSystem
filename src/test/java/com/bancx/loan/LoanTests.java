@@ -2,7 +2,6 @@ package com.bancx.loan;
 
 import com.bancx.loan.constants.Constants;
 import com.bancx.loan.data.LoanInDTO;
-import com.bancx.loan.data.LoanOutDTO;
 import com.bancx.loan.entities.Loan;
 import com.bancx.loan.exceptions.LoanNotFoundException;
 import com.bancx.loan.repositories.LoanRepository;
@@ -37,7 +36,6 @@ public class LoanTests {
     @BeforeEach
     public void setup() {
         loanRepository = mock(LoanRepository.class);
-        ModelMapper modelMapper = new ModelMapper();
         loanDomainService = new LoanDomainService(loanRepository);
 
         validator = Validation.buildDefaultValidatorFactory().getValidator();
@@ -82,9 +80,6 @@ public class LoanTests {
         //given
         newLoan.setTerm(0);
         when(loanRepository.save(any(Loan.class))).thenReturn(newLoan);
-
-        //when
-        Loan createdLoan = loanDomainService.saveNewLoan(newLoanInDTO);
 
         //then
         Set<ConstraintViolation<Loan>> violations = validator.validate(newLoan);

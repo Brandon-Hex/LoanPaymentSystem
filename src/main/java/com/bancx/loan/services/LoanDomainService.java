@@ -2,7 +2,6 @@ package com.bancx.loan.services;
 
 import com.bancx.loan.constants.Constants;
 import com.bancx.loan.data.LoanInDTO;
-import com.bancx.loan.data.LoanOutDTO;
 import com.bancx.loan.entities.Loan;
 import com.bancx.loan.exceptions.LoanNotFoundException;
 import com.bancx.loan.repositories.LoanRepository;

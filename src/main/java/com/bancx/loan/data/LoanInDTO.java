@@ -1,9 +1,6 @@
 package com.bancx.loan.data;
 
 import com.bancx.application.annotations.MaxTwoDecimalPlaces;
-import com.bancx.loan.constants.Constants;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
