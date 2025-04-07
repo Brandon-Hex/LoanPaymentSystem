@@ -43,9 +43,6 @@ public class LoanController {
     @PostMapping("/loans")
     @Transactional
     LoanOutDTO newLoan(@RequestBody @Valid LoanInDTO newLoan) {
-        var awe = loanDomainService.saveNewLoan(newLoan);
-        var a = modelMapper.map(awe, LoanOutDTO.class);
-
-        return a;
+        return modelMapper.map(loanDomainService.saveNewLoan(newLoan), LoanOutDTO.class);
     }
 }

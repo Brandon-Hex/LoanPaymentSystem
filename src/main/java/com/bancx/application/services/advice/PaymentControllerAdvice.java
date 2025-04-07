@@ -16,7 +16,7 @@ public class PaymentControllerAdvice {
     }
 
     @ExceptionHandler(PaymentTooLargeException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     String paymentTooLargeHandler(PaymentTooLargeException ex) {
         return ex.getMessage();
     }

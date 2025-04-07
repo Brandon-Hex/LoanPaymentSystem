@@ -7,15 +7,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 @Getter
-@Setter
 public class PaymentOutDTO {
     @NotNull(message = "Loan ID cannot be null")
+    @Setter
     private Long paymentId;
 
     @NotNull(message = "Loan ID cannot be null")
+    @Setter
     private Long loanId;
 
     @NotNull(message = "Payment amount cannot be null")
@@ -24,5 +26,10 @@ public class PaymentOutDTO {
     private BigDecimal paymentAmount;
 
     @NotNull(message = "Payment Date cannot be null")
+    @Setter
     private Date paymentDate;
+
+    public void setPaymentAmount(BigDecimal paymentAmount) {
+        this.paymentAmount = paymentAmount.setScale(2, RoundingMode.HALF_UP);
+    }
 }

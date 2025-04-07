@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 @Entity
@@ -36,7 +37,7 @@ public class Payment {
     private Date paymentDateTime;
 
     public Payment(BigDecimal paymentAmount, Loan loan) {
-        this.paymentAmount = paymentAmount;
+        this.paymentAmount = paymentAmount.setScale(2, RoundingMode.HALF_UP);
         this.loan = loan;
         this.paymentDateTime = new Date();
     }

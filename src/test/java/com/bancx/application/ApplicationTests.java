@@ -1,5 +1,6 @@
 package com.bancx.application;
 
+import com.bancx.application.data.LoanWithPaymentsDTO;
 import com.bancx.application.services.ProcessingService;
 import com.bancx.loan.constants.Constants;
 import com.bancx.loan.entities.Loan;
@@ -17,6 +18,8 @@ import org.modelmapper.ModelMapper;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.math.BigDecimal;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -75,7 +78,7 @@ public class ApplicationTests {
     public void testMakePayment_shouldSetLoanToSettled_whenFullyPaid() {
         //given
         Long loanId = 2L;
-        BigDecimal loanAmount = new BigDecimal("500.00");
+        BigDecimal loanAmount = new BigDecimal("500");
 
         Loan loan = new Loan(loanAmount, 6);
         loan.setLoanId(loanId);
@@ -147,5 +150,34 @@ public class ApplicationTests {
 
         Exception exception = assertThrows(LoanNotFoundException.class, () -> processingService.getLoanWithPayments(loanId));
         assertTrue(exception.getMessage().contains("Could not find Loan with ID 404"));
+    }
+
+    @Test
+    public void testGetLoanWithPayments_shouldReturnLoanWithPayments() {
+        //given
+        Long loanId = 1L;
+        Loan loan = new Loan(new BigDecimal("1000.00"), 12);
+        loan.setLoanId(loanId);
+        loan.setLoanRemainingBalance(new BigDecimal("800.00"));
+
+        Payment payment1 = new Payment(new BigDecimal("200.00"), loan);
+        payment1.setPaymentId(1L);
+        payment1.setPaymentDateTime(new Date());
+
+        Payment payment2 = new Payment(new BigDecimal("100.00"), loan);
+        payment2.setPaymentId(2L);
+        payment2.setPaymentDateTime(new Date());
+
+        when(loanRepository.findById(loanId)).thenReturn(java.util.Optional.of(loan));
+        when(paymentRepository.findAllByLoanId(loanId)).thenReturn(List.of(payment1, payment2));
+
+        //when
+        LoanWithPaymentsDTO result = processingService.getLoanWithPayments(loanId);
+
+        //then
+        assertNotNull(result);
+        assertEquals(2, result.getPayments().size());
+        assertEquals(payment1.getPaymentAmount(), result.getPayments().get(0).getPaymentAmount());
+        assertEquals(payment2.getPaymentAmount(), result.getPayments().get(1).getPaymentAmount());
     }
 }

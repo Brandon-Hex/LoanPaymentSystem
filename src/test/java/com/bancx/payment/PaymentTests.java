@@ -4,6 +4,7 @@ import com.bancx.loan.entities.Loan;
 import com.bancx.payment.data.PaymentInDTO;
 import com.bancx.payment.data.PaymentOutDTO;
 import com.bancx.payment.entities.Payment;
+import com.bancx.payment.exceptions.FailedPaymentException;
 import com.bancx.payment.exceptions.PaymentNotFoundException;
 import com.bancx.payment.repositories.PaymentRepository;
 import com.bancx.payment.services.PaymentDomainService;
@@ -12,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
 
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -39,7 +41,7 @@ public class PaymentTests {
         when(paymentRepository.findById(1L)).thenReturn(Optional.of(payment));
 
         //when
-        PaymentOutDTO result = paymentService.getPaymentById(1L);
+        Payment result = paymentService.getPaymentById(1L);
 
         //then
         assertNotNull(result);
@@ -72,6 +74,29 @@ public class PaymentTests {
         assertNotNull(savedPayment);
         assertEquals(new BigDecimal("200.00"), savedPayment.getPaymentAmount());
         assertEquals(loan, savedPayment.getLoan());
+    }
+
+    @Test
+    public void testSaveNewPayment_shouldHandlePaymentFailure_whenUnexpectedErrorOccurs() {
+        //given
+        Loan loan = new Loan(new BigDecimal("1000.00"), 12);
+        loan.setLoanId(1L);
+        loan.setLoanRemainingBalance(new BigDecimal("800.00"));
+
+        PaymentInDTO paymentInDTO = new PaymentInDTO();
+        paymentInDTO.setLoanId(1L);
+        paymentInDTO.setPaymentAmount(new BigDecimal("200.00"));
+
+        //simulate database failure when saving
+        when(paymentRepository.save(any(Payment.class))).thenThrow(new RuntimeException("Database unavailable"));
+
+        //then
+        FailedPaymentException exception = assertThrows(
+                FailedPaymentException.class,
+                () -> paymentService.saveNewPayment(paymentInDTO, loan)
+        );
+
+        assertEquals("Failed to process payment", exception.getMessage());
     }
 }
 

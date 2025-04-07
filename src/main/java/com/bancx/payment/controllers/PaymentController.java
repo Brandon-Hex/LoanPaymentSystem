@@ -29,15 +29,12 @@ public class PaymentController {
 
     @GetMapping("/payments/{paymentId}")
     PaymentOutDTO getPaymentById(@PathVariable Long paymentId) {
-        return paymentDomainService.getPaymentById(paymentId);
+        return modelMapper.map(paymentDomainService.getPaymentById(paymentId), PaymentOutDTO.class);
     }
 
     @PostMapping("/payments")
     @Transactional
     PaymentOutDTO newPayment(@RequestBody @Valid PaymentInDTO newPayment) {
-        PaymentOutDTO payOutDTO = modelMapper.map(processingService.makePayment(newPayment), PaymentOutDTO.class);
-        payOutDTO.setLoanId(newPayment.getLoanId());
-
-        return payOutDTO;
+        return modelMapper.map(processingService.makePayment(newPayment), PaymentOutDTO.class);
     }
 }

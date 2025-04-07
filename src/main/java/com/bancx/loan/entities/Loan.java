@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Entity
 @Table(name="LOAN")
@@ -39,9 +40,10 @@ public class Loan {
     private Constants.LoanStatus status;
 
     public Loan(BigDecimal initialLoanAmount, int term) {
-        this.setInitialLoanAmount(initialLoanAmount);
+        BigDecimal loanAmountToTwoDecimals = initialLoanAmount.setScale(2, RoundingMode.HALF_UP);
+        this.setInitialLoanAmount(loanAmountToTwoDecimals);
         this.setTerm(term);
         this.setStatus(Constants.LoanStatus.ACTIVE);
-        this.loanRemainingBalance = initialLoanAmount;
+        this.loanRemainingBalance = loanAmountToTwoDecimals;
     }
 }
